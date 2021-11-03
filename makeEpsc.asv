@@ -1,0 +1,30 @@
+function [dEpsc, epsc, T, q] = makeEpsc(t1, t2, dt)
+% make the shape of EPSC as difference between two exponentilas
+% [dEpsc, epsc, T, q] = makeEpsc(t1, t2, dt);
+%
+% 
+% dEpsc - is such that if the current of a neuron is updated by:
+%         I(t+1) = q*I(t) + dEpsc(t+1) 
+%         the epsc will be exactly reconstructed
+% epsc  - shape of epsc, normalized so the peak is 1
+% T     - array with times for which epsc is computed
+% q     - decay factor
+% Jul-2009 MA
+
+%% make the epsc
+T=0:dt:5*t2;
+epsc = exp(-T/t2) - exp(-T/t1);
+epsc = epsc/max(epsc);
+
+% get the decay factor
+n2 = t2/dt +1;
+q=exp(-1/n2);
+
+%% compute Delta so that when added to I of neuron the epsc will be
+%% reconstructed
+dEpsc = zeros(size(epsc));
+for ii=2:length(epsc)
+    dEpsc(ii) = Epsc(ii) - Epsc(ii-1)*q;
+end
+
+return

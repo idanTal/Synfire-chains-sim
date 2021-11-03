@@ -1,0 +1,3 @@
+% setPath
+addpath(pwd);
+

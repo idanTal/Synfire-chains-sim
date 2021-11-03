@@ -1,0 +1,18 @@
+function [connections,s] = makePools(N,P,W,s)
+% distribute N neurons in P pools of width W.
+
+% Jul 2009
+if ~exist('s','var'), s=[]; end
+if isempty(s)
+    s=rand('twister');
+else
+    rand('twister',s);
+end
+
+connections=ceil(N*rand(W,P));
+% check for repeating the same neuron in the same pool
+for ii = 1:P
+    [U,I,J] = unique(connections(:,ii));
+    if ~isempty(I)
+        U(I) = rand(length(I),1);
+return
